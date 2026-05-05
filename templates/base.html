@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GreenNest</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+<nav class="nav">
+  <div class="logo">🌿 GreenNest <span class="tm">A Yashdeep™ Brand</span></div>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/support">Support</a>
+    {% if current_user.is_authenticated %}
+      {% if current_user.is_admin %}
+        <a href="/admin">Admin</a>
+      {% endif %}
+      <a href="/logout">Logout ({{ current_user.name }})</a>
+    {% else %}
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    {% endif %}
+  </div>
+</nav>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for msg in messages %}
+      <div class="flash">{{ msg }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+{% block content %}{% endblock %}
+
+<footer class="footer">
+  <p>GreenNest · A Yashdeep™ Brand · © 2026</p>
+</footer>
+</body>
+</html>

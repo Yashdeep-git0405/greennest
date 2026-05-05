@@ -1,0 +1,56 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: #f9faf7; color: #1a1a1a; }
+
+.nav { background: #fff; padding: 1rem 2rem; display: flex;
+  justify-content: space-between; align-items: center;
+  border-bottom: 1px solid #e5e7eb; }
+.logo { font-size: 20px; font-weight: 700; color: #1a7a4a; }
+.tm { font-size: 11px; color: #6b7280; margin-left: 8px; }
+.nav-links a { margin-left: 1.5rem; text-decoration: none;
+  color: #6b7280; font-size: 14px; }
+.nav-links a:hover { color: #1a7a4a; }
+
+.hero { background: linear-gradient(135deg, #e8f5ee, #d4edde);
+  padding: 4rem 2rem; text-align: center; }
+.hero h1 { font-size: 40px; margin-bottom: 12px; }
+.hero h1 span { color: #1a7a4a; }
+.hero p { color: #6b7280; margin-bottom: 20px; }
+.btn-primary { background: #1a7a4a; color: #fff; padding: 12px 28px;
+  border-radius: 24px; text-decoration: none; font-size: 14px; }
+
+.section { padding: 2rem; }
+.section h2 { font-size: 20px; margin-bottom: 1rem; }
+
+.categories { display: flex; gap: 12px; flex-wrap: wrap; }
+.cat-card { background: #fff; border: 1px solid #e5e7eb;
+  border-radius: 12px; padding: 14px 20px; font-size: 14px;
+  cursor: pointer; }
+.cat-card:hover { border-color: #1a7a4a; background: #e8f5ee; }
+
+.products { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.prod-card { background: #fff; border: 1px solid #e5e7eb;
+  border-radius: 14px; overflow: hidden; }
+.prod-img { background: #e8f5ee; height: 120px; display: flex;
+  align-items: center; justify-content: center; font-size: 48px; }
+.prod-body { padding: 12px; }
+.prod-body h4 { font-size: 14px; font-weight: 600; }
+.prod-body p { font-size: 12px; color: #6b7280; margin: 4px 0 8px; }
+.price { font-size: 16px; font-weight: 700; color: #1a7a4a; }
+.add-btn { float: right; background: #1a7a4a; color: #fff;
+  border: none; border-radius: 8px; padding: 6px 12px;
+  cursor: pointer; font-size: 13px; }
+
+form input, form select, form textarea {
+  display: block; width: 100%; margin-bottom: 12px;
+  padding: 10px 14px; border: 1px solid #e5e7eb;
+  border-radius: 10px; font-size: 14px; background: #f9faf7; }
+form button { background: #1a7a4a; color: #fff; border: none;
+  padding: 11px 24px; border-radius: 24px; cursor: pointer;
+  font-size: 14px; }
+
+.review-item { background: #fff; border: 1px solid #e5e7eb;
+  border-radius: 12px; padding: 1rem; margin-bottom: 12px; }
+
+.footer { background: #1a2e1f; color: #9ab89e; padding: 1.5rem 2rem;
+  display: flex; justify-content: space-between; font-size: 13px; }
+.footer a { color: #9ab89e; text-decoration: none; }

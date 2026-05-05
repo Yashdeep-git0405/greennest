@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>GreenNest | Fresh Groceries</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="nav">
+    <div class="logo">🌿 GreenNest <span class="tm">A Yashdeep™ Brand</span></div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/support">Support & Reviews</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Fresh Groceries, <span>Delivered Fast</span></h1>
+    <p>Farm to your door — quality you can taste.</p>
+    <a href="#products" class="btn-primary">Shop Now</a>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="section">
+    <h2>Browse Categories</h2>
+    <div class="categories">
+      <div class="cat-card">🥦 Vegetables</div>
+      <div class="cat-card">🍓 Fruits</div>
+      <div class="cat-card">🥛 Dairy</div>
+      <div class="cat-card">🍞 Bakery</div>
+      <div class="cat-card">🥩 Meat</div>
+      <div class="cat-card">🧃 Drinks</div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="section" id="products">
+    <h2>Featured Products</h2>
+    <div class="products">
+      <div class="prod-card">
+        <div class="prod-img">🥑</div>
+        <div class="prod-body">
+          <h4>Organic Avocado</h4>
+          <p>Pack of 3 · 450g</p>
+          <span class="price">₹89</span>
+          <button class="add-btn">+ Add</button>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-img">🍅</div>
+        <div class="prod-body">
+          <h4>Farm Tomatoes</h4>
+          <p>500g · Local</p>
+          <span class="price">₹45</span>
+          <button class="add-btn">+ Add</button>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-img">🍌</div>
+        <div class="prod-body">
+          <h4>Bananas</h4>
+          <p>1 dozen · Fresh</p>
+          <span class="price">₹35</span>
+          <button class="add-btn">+ Add</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>GreenNest · A Yashdeep™ Brand · © 2026</p>
+    <a href="/support">Support & Reviews</a>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>GreenNest | Support & Reviews</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="logo">🌿 GreenNest <span class="tm">A Yashdeep™ Brand</span></div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/support">Support & Reviews</a>
+    </div>
+  </nav>
+
+  <section class="section">
+    <h2>Raise a Complaint</h2>
+    <form id="complaintForm">
+      <input type="text" id="c-name" placeholder="Your Name" required />
+      <input type="text" id="c-order" placeholder="Order ID" required />
+      <select id="c-type">
+        <option value="">-- Issue Type --</option>
+        <option>Wrong item delivered</option>
+        <option>Late delivery</option>
+        <option>Refund not received</option>
+        <option>Product quality issue</option>
+      </select>
+      <textarea id="c-desc" placeholder="Describe your issue..."></textarea>
+      <button type="button" onclick="submitComplaint()">Submit Complaint</button>
+      <p id="c-msg" style="color:green;display:none">✅ Complaint submitted!</p>
+    </form>
+  </section>
+
+  <section class="section">
+    <h2>Write a Review</h2>
+    <form id="reviewForm">
+      <input type="text" id="r-name" placeholder="Your Name" required />
+      <select id="r-stars">
+        <option value="5">★★★★★ 5 stars</option>
+        <option value="4">★★★★☆ 4 stars</option>
+        <option value="3">★★★☆☆ 3 stars</option>
+        <option value="2">★★☆☆☆ 2 stars</option>
+        <option value="1">★☆☆☆☆ 1 star</option>
+      </select>
+      <textarea id="r-text" placeholder="Your review..."></textarea>
+      <button type="button" onclick="submitReview()">Submit Review</button>
+      <p id="r-msg" style="color:green;display:none">⭐ Review submitted!</p>
+    </form>
+  </section>
+
+  <!-- REVIEWS FROM FLASK -->
+  <section class="section">
+    <h2>Customer Reviews</h2>
+    {% for review in reviews %}
+    <div class="review-item">
+      <strong>{{ review.name }}</strong> — {{ review.stars }} ★
+      <p>{{ review.text }}</p>
+    </div>
+    {% else %}
+    <p>No reviews yet. Be the first!</p>
+    {% endfor %}
+  </section>
+
+  <footer class="footer">
+    <p>GreenNest · A Yashdeep™ Brand · © 2026</p>
+  </footer>
+
+  <script>
+    async function submitComplaint() {
+      const data = {
+        name: document.getElementById('c-name').value,
+        order: document.getElementById('c-order').value,
+        type: document.getElementById('c-type').value,
+        desc: document.getElementById('c-desc').value
+      };
+      const res = await fetch('/submit-complaint', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const json = await res.json();
+      if (json.status === 'success') {
+        document.getElementById('c-msg').style.display = 'block';
+      }
+    }
+
+    async function submitReview() {
+      const data = {
+        name: document.getElementById('r-name').value,
+        stars: document.getElementById('r-stars').value,
+        text: document.getElementById('r-text').value
+      };
+      const res = await fetch('/submit-review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const json = await res.json();
+      if (json.status === 'success') {
+        document.getElementById('r-msg').style.display = 'block';
+        setTimeout(() => location.reload(), 1000);
+      }
+    }
+  </script>
+
+</body>
+</html>
