@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-header">
+  <h2>All Products</h2>
+  <p>Fresh groceries sourced daily from local farms</p>
+</div>
+
+<section class="section">
+  <div class="sec-title">🥦 Vegetables &amp; Fruits</div>
+  <div class="products">
+
+    <div class="prod-card">
+      <div class="prod-img" style="background:#e8f5ee">🥑<span class="badge-new">New</span></div>
+      <div class="prod-body">
+        <div class="stars">★★★★★</div>
+        <div class="prod-name">Organic Avocado</div>
+        <div class="prod-sub">Pack of 3 · 450g</div>
+        <div class="prod-foot"><span class="price">₹89</span>
+          <button class="add-btn" onclick="addToCart('Organic Avocado','🥑',89)">+</button></div>
+      </div>
+    </div>
+
+    <div class="prod-card">
+      <div class="prod-img" style="background:#fff8ed">🍅<span class="badge-sale">Sale</span></div>
+      <div class="prod-body">
+        <div class="stars">★★★★☆</div>
+        <div class="prod-name">Farm Tomatoes</div>
+        <div class="prod-sub">500g · Local</div>
+        <div class="prod-foot"><span class="price">₹45</span><span class="price-old">₹60</span>
+          <button class="add-btn" onclick="addToCart('Farm Tomatoes','🍅',45)">+</button></div>
+      </div>
+    </div>
+
+    <div class="prod-card">
+      <div class="prod-img" style="background:#fffbe6">🍌</div>
+      <div class="prod-body">
+        <div class="stars">★★★★★</div>
+        <div class="prod-name">Bananas</div>
+        <div class="prod-sub">1 dozen · Fresh</div>
+        <div class="prod-foot"><span class="price">₹35</span>
+          <button class="add-btn" onclick="addToCart('Bananas','🍌',35)">+</button></div>
+      </div>
+    </div>
+
+    <div class="prod-card">
+      <div class="prod-img" style="background:#e8f5ee">🥦</div>
+      <div class="prod-body">
+        <div class="stars">★★★★★</div>
+        <div class="prod-name">Broccoli</div>
+        <div class="prod-sub">500g · Organic</div>
+        <div class="prod-foot"><span class="price">₹55</span>
+          <button class="add-btn" onclick="addToCart('Broccoli','🥦',55)">+</button></div>
+      </div>
+    </div>
+
+    <div class="prod-card">
+      <div class="prod-img" style="background:#fff0f0">🍎</div>
+      <div class="prod-body">
+        <div class="stars">★★★★★</div>
+        <div class="prod-name">Red Apples</div>
+        <div class="prod-sub">1kg · Kashmiri</div>
+        <div class="prod-foot"><span class="price">₹120</span>
+          <button class="add-btn" onclick="addToCart('Red Apples','🍎',120)">+</button></div>
+      </div>
+    </div>
+
+    <div class="prod-card">
+      <div class="prod-img" style="background:#f0fff0">🥬</div>
+      <div class="prod-body">
+        <div class="stars">★★★★☆</div>
+        <div class="prod-name">Spinach</div>
+        <div class="prod-sub">250g · Fresh</div>
+        <div class="prod-foot"><span class="price">₹25</span>
+          <button class="add-btn" onclick="addToCart('Spinach','🥬',25)">+</button></div>
+      </div>
+    </div>
+
+    <div class="prod-card">
+      <div class="prod-img" style="background:#fff8e1">🧅</div>
+      <div class="prod-body">
+        <div class="stars">★★★★☆</div>
+        <div class="prod-name">Onions</div>
+        <div class="prod-sub">1kg · Local</div>
+        <div class="prod-foot"><span class="price">₹30</span>
+          <button class="add-btn" onclick="addToCart('Onions','🧅',30)">+</button></div>
+      </div>
+    </div>
+
+    <div class="prod-card">
+      <div class="prod-img" style="background:#fff3e0">🥕</div>
+      <div class="prod-body">
+        <div class="stars">★★★★★</div>
+        <div class="prod-name">Carrots</div>
+        <div class="prod-sub">500g · Fresh</div>
+        <div class="prod-foot"><span class="price">₹40</span>
+          <button class="add-btn" onclick="addToCart('Carrots','🥕',40)">+</button></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section">
+  <div class="sec-title">🥛 Dairy &amp; Bakery</div>
+  <div class="products">
+
+    <div class="prod-card">
+      <div class="prod-img" style="background:#f0f4ff">🥛<span class="badge-new">New</span></div>
+      <div class="prod-body">
+        <div class="stars">★★★★★</div>
+        <div class="prod-name">Full Cream Milk</div>
+        <div class="prod-sub">1 litre · Fresh</div>
+        <div class="prod-foot"><span class="price">₹62</span>
+          <button class="add-btn" onclick="addToCart('Full Cream Milk','🥛',62)">+</button></div>
+      </div>
+    </div>
+
+    <div class="prod-card">
+      <div class="prod-img" style="background:#fff8ed">🧀</div>
+      <div class="prod-body">
+        <div class="stars">★★★★☆</div>
+        <div class="prod-name">Paneer</div>
+        <div class="prod-sub">200g · Fresh</div>
+        <div class="prod-foot"><span class="price">₹75</span>
+          <button class="add-btn" onclick="addToCart('Paneer','🧀',75)">+</button></div>
+      </div>
+    </div>
+
+    <div class="prod-card">
+      <div class="prod-img" style="background:#fffbe6">🍞</div>
+      <div class="prod-body">
+        <div class="stars">★★★★★</div>
+        <div class="prod-name">Whole Wheat Bread</div>
+        <div class="prod-sub">400g · Fresh baked</div>
+        <div class="prod-foot"><span class="price">₹45</span>
+          <button class="add-btn" onclick="addToCart('Whole Wheat Bread','🍞',45)">+</button></div>
+      </div>
+    </div>
+
+    <div class="prod-card">
+      <div class="prod-img" style="background:#fef2f2">🥚<span class="badge-sale">Sale</span></div>
+      <div class="prod-body">
+        <div class="stars">★★★★★</div>
+        <div class="prod-name">Farm Eggs</div>
+        <div class="prod-sub">12 pcs · Free range</div>
+        <div class="prod-foot"><span class="price">₹90</span><span class="price-old">₹110</span>
+          <button class="add-btn" onclick="addToCart('Farm Eggs','🥚',90)">+</button></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section">
+  <div class="sec-title">🧃 Drinks &amp; Others</div>
+  <div class="products">
+
+    <div class="prod-card">
+      <div class="prod-img" style="background:#e8f5ee">🧃</div>
+      <div class="prod-body">
+        <div class="stars">★★★★★</div>
+        <div class="prod-name">Fresh Orange Juice</div>
+        <div class="prod-sub">1 litre · No sugar</div>
+        <div class="prod-foot"><span class="price">₹85</span>
+          <button class="add-btn" onclick="addToCart('Orange Juice','🧃',85)">+</button></div>
+      </div>
+    </div>
+
+    <div class="prod-card">
+      <div class="prod-img" style="background:#f0f4ff">💧</div>
+      <div class="prod-body">
+        <div class="stars">★★★★★</div>
+        <div class="prod-name">Mineral Water</div>
+        <div class="prod-sub">1 litre · Pack of 6</div>
+        <div class="prod-foot"><span class="price">₹70</span>
+          <button class="add-btn" onclick="addToCart('Mineral Water','💧',70)">+</button></div>
+      </div>
+    </div>
+
+    <div class="prod-card">
+      <div class="prod-img" style="background:#fff8ed">☕</div>
+      <div class="prod-body">
+        <div class="stars">★★★★☆</div>
+        <div class="prod-name">Filter Coffee</div>
+        <div class="prod-sub">200g · Coorg blend</div>
+        <div class="prod-foot"><span class="price">₹180</span>
+          <button class="add-btn" onclick="addToCart('Filter Coffee','☕',180)">+</button></div>
+      </div>
+    </div>
+
+    <div class="prod-card">
+      <div class="prod-img" style="background:#f0fff0">🍵</div>
+      <div class="prod-body">
+        <div class="stars">★★★★★</div>
+        <div class="prod-name">Green Tea</div>
+        <div class="prod-sub">25 bags · Assam</div>
+        <div class="prod-foot"><span class="price">₹95</span>
+          <button class="add-btn" onclick="addToCart('Green Tea','🍵',95)">+</button></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+function addToCart(name, icon, price) {
+  let cart = JSON.parse(localStorage.getItem('gn_cart') || '[]');
+  const existing = cart.find(i => i.name === name);
+  if (existing) existing.qty++;
+  else cart.push({ name, icon, price, qty: 1 });
+  localStorage.setItem('gn_cart', JSON.stringify(cart));
+  updateCartCount();
+  event.target.textContent = '✓';
+  event.target.style.background = '#2d9e61';
+  setTimeout(() => { event.target.textContent = '+'; event.target.style.background = ''; }, 800);
+}
+</script>
+
+{% endblock %}

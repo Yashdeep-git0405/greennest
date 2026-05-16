@@ -3,31 +3,32 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GreenNest</title>
+  <title>GreenNest — A Yashdeep™ Brand</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
 </head>
 <body>
+
 <nav class="nav">
-  <div class="logo">🌿 GreenNest <span class="tm">A Yashdeep™ Brand</span></div>
+  <a href="/" class="logo-wrap">
+    <div class="logo"><span class="logo-dot"></span>GreenNest</div>
+    <div class="tm">A <span>Yashdeep™</span> Brand</div>
+  </a>
   <div class="nav-links">
-    <a href="/">Home</a>
-    <a href="/support">Support</a>
-    {% if current_user.is_authenticated %}
-      {% if current_user.is_admin %}
-        <a href="/admin">Admin</a>
-      {% endif %}
-      <a href="/logout">Logout ({{ current_user.name }})</a>
-    {% else %}
-      <a href="/login">Login</a>
-      <a href="/register">Register</a>
-    {% endif %}
+    <a href="/" class="nav-btn {% if request.endpoint == 'home' %}active{% endif %}">Home</a>
+    <a href="/shop" class="nav-btn {% if request.endpoint == 'shop' %}active{% endif %}">Shop</a>
+    <a href="/about" class="nav-btn {% if request.endpoint == 'about' %}active{% endif %}">About</a>
+    <a href="/support" class="nav-btn {% if request.endpoint == 'support' %}active{% endif %}">Support</a>
+    
   </div>
+  <a href="/cart" class="cart-pill">🛒 Cart <span class="cart-badge" id="cart-count">0</span></a>
 </nav>
 
 {% with messages = get_flashed_messages() %}
   {% if messages %}
     {% for msg in messages %}
-      <div class="flash">{{ msg }}</div>
+      <div class="flash-msg">{{ msg }}</div>
     {% endfor %}
   {% endif %}
 {% endwith %}
@@ -35,7 +36,26 @@
 {% block content %}{% endblock %}
 
 <footer class="footer">
-  <p>GreenNest · A Yashdeep™ Brand · © 2026</p>
+  <div>
+    <div class="footer-logo">GreenNest</div>
+    <div class="footer-tm">A Yashdeep™ Brand &nbsp;·&nbsp; © 2026 All rights reserved.</div>
+  </div>
+  <div class="footer-tagline">Fresh. Local. Trusted.</div>
+  <div class="footer-links">
+    <a href="/about">About</a>
+    <a href="/support">Support</a>
+  </div>
 </footer>
+
+<script>
+  // Cart count from localStorage
+  function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('gn_cart') || '[]');
+    const total = cart.reduce((s, i) => s + i.qty, 0);
+    const el = document.getElementById('cart-count');
+    if (el) el.textContent = total;
+  }
+  updateCartCount();
+</script>
 </body>
 </html>

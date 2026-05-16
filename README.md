@@ -1,4 +1,4 @@
-# 🌿 GreenNest — Online Grocery Store
+<!-- # 🌿 GreenNest — Online Grocery Store
 
 > A Yashdeep™ Brand | Built with Flask + SQLite + HTML/CSS
 
@@ -127,4 +127,4 @@ http://127.0.0.1:5000
 
 ## 📄 License
 
-This project is open source and free to use for learning purposes.
+This project is open source and free to use for learning purposes. -->

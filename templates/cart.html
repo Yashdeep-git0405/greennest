@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="/">Home</a> → Cart</div>
+  <h2>Your Cart</h2>
+  <p id="cart-item-count">Loading...</p>
+</div>
+
+<div class="cart-layout">
+
+  <!-- LEFT: CART ITEMS -->
+  <div>
+    <div class="cart-items" id="cart-items-list"></div>
+    <div class="empty-cart" id="empty-cart" style="display:none">
+      <div class="empty-ic">🛒</div>
+      <h3>Your cart is empty</h3>
+      <p>Add some fresh items to get started!</p>
+      <a href="/shop" class="btn-primary" style="display:inline-block;margin-top:1rem;text-decoration:none">Browse Products</a>
+    </div>
+  </div>
+
+  <!-- RIGHT: ORDER SUMMARY -->
+  <div class="order-summary">
+    <div class="os-title">Order Summary</div>
+    <div class="os-row"><span>Subtotal</span><span id="os-sub">₹0</span></div>
+    <div class="os-row"><span>Delivery</span><span style="color:#1a7a4a;font-weight:500">FREE</span></div>
+    <div class="os-row"><span>Discount</span><span id="os-disc" style="color:#ef4444">-₹0</span></div>
+    <div class="os-total"><span>Total</span><span id="os-total">₹0</span></div>
+
+    <div class="coupon-row">
+      <input type="text" id="coupon-input" placeholder="Coupon code"/>
+      <button onclick="applyCoupon()">Apply</button>
+    </div>
+    <p class="coupon-hint">Try: FRESH10 · YASHDEEP20</p>
+
+    <a href="/payment" class="checkout-btn" id="checkout-btn">Proceed to Checkout →</a>
+  </div>
+
+</div>
+
+<script>
+let discount = 0;
+
+function renderCart() {
+  const cart = JSON.parse(localStorage.getItem('gn_cart') || '[]');
+  const list = document.getElementById('cart-items-list');
+  const empty = document.getElementById('empty-cart');
+  const countEl = document.getElementById('cart-item-count');
+  const total = cart.reduce((s, i) => s + i.qty, 0);
+  countEl.textContent = total + ' item' + (total !== 1 ? 's' : '') + ' in your cart';
+
+  if (cart.length === 0) {
+    list.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  list.innerHTML = cart.map((item, i) => `
+    <div class="cart-item">
+      <div class="ci-img">${item.icon}</div>
+      <div class="ci-info">
+        <div class="ci-name">${item.name}</div>
+        <div class="ci-sub">Fresh · Daily sourced</div>
+        <div class="ci-price">₹${item.price * item.qty}</div>
+      </div>
+      <div class="qty-ctrl">
+        <button class="qty-btn" onclick="changeQty(${i}, -1)">−</button>
+        <span class="qty-num">${item.qty}</span>
+        <button class="qty-btn" onclick="changeQty(${i}, 1)">+</button>
+      </div>
+      <button class="remove-btn" onclick="removeItem(${i})">🗑</button>
+    </div>`).join('');
+  updateSummary();
+}
+
+function updateSummary() {
+  const cart = JSON.parse(localStorage.getItem('gn_cart') || '[]');
+  const sub  = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const disc = Math.round(sub * discount);
+  const tot  = sub - disc;
+  document.getElementById('os-sub').textContent   = '₹' + sub;
+  document.getElementById('os-disc').textContent  = '-₹' + disc;
+  document.getElementById('os-total').textContent = '₹' + tot;
+  localStorage.setItem('gn_total', tot);
+}
+
+function changeQty(i, d) {
+  let cart = JSON.parse(localStorage.getItem('gn_cart') || '[]');
+  cart[i].qty += d;
+  if (cart[i].qty <= 0) cart.splice(i, 1);
+  localStorage.setItem('gn_cart', JSON.stringify(cart));
+  renderCart();
+  updateCartCount();
+}
+
+function removeItem(i) {
+  let cart = JSON.parse(localStorage.getItem('gn_cart') || '[]');
+  cart.splice(i, 1);
+  localStorage.setItem('gn_cart', JSON.stringify(cart));
+  renderCart();
+  updateCartCount();
+}
+
+function applyCoupon() {
+  const code = document.getElementById('coupon-input').value.trim().toUpperCase();
+  if (code === 'FRESH10')     { discount = 0.10; alert('✅ FRESH10 applied! 10% off'); }
+  else if (code === 'YASHDEEP20') { discount = 0.20; alert('✅ YASHDEEP20 applied! 20% off'); }
+  else { alert('❌ Invalid coupon. Try FRESH10 or YASHDEEP20'); return; }
+  updateSummary();
+}
+
+renderCart();
+</script>
+
+{% endblock %}

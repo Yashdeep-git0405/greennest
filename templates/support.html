@@ -1,109 +1,211 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>GreenNest | Support & Reviews</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
 
-  <nav class="nav">
-    <div class="logo">🌿 GreenNest <span class="tm">A Yashdeep™ Brand</span></div>
-    <div class="nav-links">
-      <a href="/">Home</a>
-      <a href="/support">Support & Reviews</a>
+<div class="page-header">
+  <h2>Help &amp; Reviews</h2>
+  <p>Got a problem with your order? Want to share your experience? We're here to help.</p>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('help', this)">Help Center</div>
+  <div class="tab" onclick="switchTab('complaint', this)">Raise a Complaint</div>
+  <div class="tab" onclick="switchTab('reviews', this)">Customer Reviews</div>
+  <div class="tab" onclick="switchTab('faq', this)">FAQs</div>
+</div>
+
+<!-- HELP CENTER -->
+<div class="tab-panel active" id="tp-help">
+  <div class="help-grid">
+    <div class="hc" onclick="switchTab('complaint', null)"><div class="hc-ic">📦</div><h4>Order Issues</h4><p>Wrong item, missing or damaged goods received.</p><div class="hc-arr">Raise complaint →</div></div>
+    <div class="hc" onclick="switchTab('complaint', null)"><div class="hc-ic">🚚</div><h4>Delivery Problem</h4><p>Late delivery or order not received.</p><div class="hc-arr">Raise complaint →</div></div>
+    <div class="hc" onclick="switchTab('complaint', null)"><div class="hc-ic">💳</div><h4>Payment &amp; Refund</h4><p>Double charged or refund not received.</p><div class="hc-arr">Raise complaint →</div></div>
+    <div class="hc" onclick="switchTab('complaint', null)"><div class="hc-ic">🥦</div><h4>Product Quality</h4><p>Stale or low-quality products received.</p><div class="hc-arr">Raise complaint →</div></div>
+    <div class="hc" onclick="switchTab('reviews', null)"><div class="hc-ic">⭐</div><h4>Write a Review</h4><p>Share your experience to help others.</p><div class="hc-arr">Write review →</div></div>
+    <div class="hc" onclick="switchTab('faq', null)"><div class="hc-ic">❓</div><h4>FAQs</h4><p>Quick answers to common questions.</p><div class="hc-arr">Browse FAQs →</div></div>
+  </div>
+  <div class="contact-card">
+    <div style="font-size:2rem">📞</div>
+    <div>
+      <div class="cc-title">Still need help?</div>
+      <div class="cc-info">Call us: <strong>+91 98765 43210</strong> · Mon–Sat, 9am–7pm</div>
+      <div class="cc-info">Email: <strong>support@greennest.in</strong></div>
     </div>
-  </nav>
+  </div>
+</div>
 
-  <section class="section">
-    <h2>Raise a Complaint</h2>
-    <form id="complaintForm">
-      <input type="text" id="c-name" placeholder="Your Name" required />
-      <input type="text" id="c-order" placeholder="Order ID" required />
-      <select id="c-type">
-        <option value="">-- Issue Type --</option>
+<!-- COMPLAINT FORM -->
+<div class="tab-panel" id="tp-complaint">
+  <div class="form-card">
+    <h3>Raise a Complaint</h3>
+    <div class="form-2">
+      <div class="form-group"><label>Your Name</label><input class="fc-input" type="text" placeholder="e.g. Rahul Sharma" id="c-name"/></div>
+      <div class="form-group"><label>Order ID</label><input class="fc-input" type="text" placeholder="e.g. GN-20451" id="c-order"/></div>
+    </div>
+    <div class="form-group"><label>Email Address</label><input class="fc-input" type="email" placeholder="your@email.com" id="c-email"/></div>
+    <div class="form-group">
+      <label>Issue Type</label>
+      <select class="fc-input" id="c-type">
+        <option value="">-- Select issue --</option>
         <option>Wrong item delivered</option>
-        <option>Late delivery</option>
+        <option>Missing product</option>
+        <option>Damaged goods</option>
+        <option>Late / no delivery</option>
         <option>Refund not received</option>
+        <option>Payment issue</option>
         <option>Product quality issue</option>
+        <option>Other</option>
       </select>
-      <textarea id="c-desc" placeholder="Describe your issue..."></textarea>
-      <button type="button" onclick="submitComplaint()">Submit Complaint</button>
-      <p id="c-msg" style="color:green;display:none">✅ Complaint submitted!</p>
-    </form>
-  </section>
+    </div>
+    <div class="form-group"><label>Describe your issue</label><textarea class="fc-input" style="height:90px;resize:vertical" placeholder="Please describe what happened in detail..." id="c-desc"></textarea></div>
+    <button class="sub-btn" onclick="submitComplaint()">Submit Complaint</button>
+    <div class="succ-msg" id="c-succ">✅ Complaint submitted! We'll get back to you within 24 hours.</div>
+  </div>
+</div>
 
-  <section class="section">
-    <h2>Write a Review</h2>
-    <form id="reviewForm">
-      <input type="text" id="r-name" placeholder="Your Name" required />
-      <select id="r-stars">
-        <option value="5">★★★★★ 5 stars</option>
-        <option value="4">★★★★☆ 4 stars</option>
-        <option value="3">★★★☆☆ 3 stars</option>
-        <option value="2">★★☆☆☆ 2 stars</option>
-        <option value="1">★☆☆☆☆ 1 star</option>
-      </select>
-      <textarea id="r-text" placeholder="Your review..."></textarea>
-      <button type="button" onclick="submitReview()">Submit Review</button>
-      <p id="r-msg" style="color:green;display:none">⭐ Review submitted!</p>
-    </form>
-  </section>
+<!-- REVIEWS -->
+<div class="tab-panel" id="tp-reviews">
+  <div class="rev-summary">
+    <div class="big-rat">
+      <div class="br-num">4.6</div>
+      <div class="br-stars">★★★★★</div>
+      <div class="br-cnt">128 reviews</div>
+    </div>
+    <div class="bar-rows">
+      <div class="bar-row"><span class="bl">5 ★</span><div class="bt"><div class="bf" style="width:72%"></div></div><span class="bc">92</span></div>
+      <div class="bar-row"><span class="bl">4 ★</span><div class="bt"><div class="bf" style="width:18%"></div></div><span class="bc">23</span></div>
+      <div class="bar-row"><span class="bl">3 ★</span><div class="bt"><div class="bf" style="width:7%"></div></div><span class="bc">9</span></div>
+      <div class="bar-row"><span class="bl">2 ★</span><div class="bt"><div class="bf" style="width:2%"></div></div><span class="bc">3</span></div>
+      <div class="bar-row"><span class="bl">1 ★</span><div class="bt"><div class="bf" style="width:1%"></div></div><span class="bc">1</span></div>
+    </div>
+    <button class="write-rev-btn" onclick="document.getElementById('write-review').scrollIntoView({behavior:'smooth'})">+ Write a Review</button>
+  </div>
 
-  <!-- REVIEWS FROM FLASK -->
-  <section class="section">
-    <h2>Customer Reviews</h2>
-    {% for review in reviews %}
-    <div class="review-item">
-      <strong>{{ review.name }}</strong> — {{ review.stars }} ★
-      <p>{{ review.text }}</p>
+  <!-- EXISTING REVIEWS FROM DB -->
+  <div class="rev-list">
+    {% for r in reviews %}
+    <div class="rev-item">
+      <div class="rev-top">
+        <div class="reviewer"><div class="avatar">{{ r.name[:2].upper() }}</div><div><div class="rev-name">{{ r.name }}</div><div class="rev-date">{{ r.created.strftime('%d %b %Y') }}</div></div></div>
+        <div class="rev-stars">{% for i in range(r.stars) %}★{% endfor %}</div>
+      </div>
+      <div class="rev-tag">{{ r.category }}</div>
+      <div class="rev-text">{{ r.text }}</div>
     </div>
     {% else %}
-    <p>No reviews yet. Be the first!</p>
+    <!-- SAMPLE REVIEWS -->
+    <div class="rev-item">
+      <div class="rev-top"><div class="reviewer"><div class="avatar">PR</div><div><div class="rev-name">Priya Rawat</div><div class="rev-date">2 May 2026</div></div></div><div class="rev-stars">★★★★★</div></div>
+      <div class="rev-tag">Fruits &amp; Vegetables</div>
+      <div class="rev-text">Absolutely love the freshness! Tomatoes and spinach were farm-fresh. Delivery was on time and packaging was neat.</div>
+    </div>
+    <div class="rev-item">
+      <div class="rev-top"><div class="reviewer"><div class="avatar">AM</div><div><div class="rev-name">Arjun Mehta</div><div class="rev-date">28 Apr 2026</div></div></div><div class="rev-stars">★★★★☆</div></div>
+      <div class="rev-tag">Dairy</div>
+      <div class="rev-text">Good quality milk and paneer. Delivery was slightly late but customer support was responsive. Great experience overall.</div>
+    </div>
     {% endfor %}
-  </section>
+  </div>
 
-  <footer class="footer">
-    <p>GreenNest · A Yashdeep™ Brand · © 2026</p>
-  </footer>
+  <!-- WRITE REVIEW FORM -->
+  <div id="write-review" style="margin-top:2rem">
+    <div class="form-card">
+      <h3>Write a Review</h3>
+      <div class="form-group">
+        <label>Your Rating</label>
+        <div id="star-picker" style="display:flex;gap:8px;font-size:28px;cursor:pointer;color:#d1d5db"></div>
+      </div>
+      <div class="form-2">
+        <div class="form-group"><label>Your Name</label><input class="fc-input" type="text" placeholder="e.g. Rahul Sharma" id="r-name"/></div>
+        <div class="form-group">
+          <label>Category</label>
+          <select class="fc-input" id="r-cat">
+            <option>Fruits &amp; Vegetables</option>
+            <option>Dairy</option>
+            <option>Bakery</option>
+            <option>Meat</option>
+            <option>Drinks</option>
+            <option>Overall Experience</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label>Your Review</label><textarea class="fc-input" style="height:80px;resize:vertical" placeholder="Share your experience with GreenNest..." id="r-text"></textarea></div>
+      <button class="sub-btn" onclick="submitReview()">Submit Review</button>
+      <div class="succ-msg" id="r-succ">⭐ Thank you! Your review has been submitted.</div>
+    </div>
+  </div>
+</div>
 
-  <script>
-    async function submitComplaint() {
-      const data = {
-        name: document.getElementById('c-name').value,
-        order: document.getElementById('c-order').value,
-        type: document.getElementById('c-type').value,
-        desc: document.getElementById('c-desc').value
-      };
-      const res = await fetch('/submit-complaint', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      const json = await res.json();
-      if (json.status === 'success') {
-        document.getElementById('c-msg').style.display = 'block';
-      }
-    }
+<!-- FAQ -->
+<div class="tab-panel" id="tp-faq">
+  <div class="faq-list">
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How do I track my order? <span>▼</span></div><div class="faq-a">Once your order is placed, you'll receive an SMS with a tracking link. You can also check "My Orders" in your account to see live delivery status.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is the return &amp; refund policy? <span>▼</span></div><div class="faq-a">We offer 100% refund or replacement for damaged, expired, or wrong items. Raise a complaint within 24 hours of delivery with a photo, and we'll process your request within 2 business days.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How long does delivery take? <span>▼</span></div><div class="faq-a">Standard delivery takes 2–4 hours. Same-day delivery is available for orders placed before 2 PM. Express delivery (within 90 minutes) is available in select areas.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I cancel or modify my order? <span>▼</span></div><div class="faq-a">Orders can be cancelled or modified within 15 minutes of placing them. After that, the order goes into processing. Please contact support immediately if needed.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Are the products sourced fresh daily? <span>▼</span></div><div class="faq-a">Yes! GreenNest sources fruits, vegetables, and dairy products daily from local farms and verified suppliers to ensure maximum freshness in every delivery.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What payment methods are accepted? <span>▼</span></div><div class="faq-a">We accept UPI (GPay, PhonePe, Paytm), credit/debit cards, net banking, and cash on delivery. All online transactions are secured with 256-bit encryption.</div></div>
+  </div>
+</div>
 
-    async function submitReview() {
-      const data = {
-        name: document.getElementById('r-name').value,
-        stars: document.getElementById('r-stars').value,
-        text: document.getElementById('r-text').value
-      };
-      const res = await fetch('/submit-review', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      const json = await res.json();
-      if (json.status === 'success') {
-        document.getElementById('r-msg').style.display = 'block';
-        setTimeout(() => location.reload(), 1000);
-      }
-    }
-  </script>
+<script>
+let selStars = 0;
 
-</body>
-</html>
+function switchTab(name, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  if (el) el.classList.add('active');
+  else {
+    const tabs = ['help','complaint','reviews','faq'];
+    document.querySelectorAll('.tab')[tabs.indexOf(name)].classList.add('active');
+  }
+  document.getElementById('tp-' + name).classList.add('active');
+}
+
+// Build star picker
+const sp = document.getElementById('star-picker');
+for (let i = 1; i <= 5; i++) {
+  const s = document.createElement('span');
+  s.textContent = '★';
+  s.onclick = () => {
+    selStars = i;
+    document.querySelectorAll('#star-picker span').forEach((sp, j) => sp.style.color = j < i ? '#f5a623' : '#d1d5db');
+  };
+  sp.appendChild(s);
+}
+
+async function submitComplaint() {
+  const name  = document.getElementById('c-name').value;
+  const order = document.getElementById('c-order').value;
+  const type  = document.getElementById('c-type').value;
+  if (!name || !order || !type) { alert('Please fill in all required fields.'); return; }
+  const res = await fetch('/submit-complaint', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, order, email: document.getElementById('c-email').value, type, desc: document.getElementById('c-desc').value })
+  });
+  const data = await res.json();
+  if (data.status === 'success') {
+    document.getElementById('c-succ').style.display = 'block';
+    ['c-name','c-order','c-email','c-desc'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('c-type').value = '';
+  }
+}
+
+async function submitReview() {
+  const name = document.getElementById('r-name').value;
+  const text = document.getElementById('r-text').value;
+  if (!name || !text || selStars === 0) { alert('Please enter your name, rating, and review.'); return; }
+  const res = await fetch('/submit-review', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, stars: selStars, category: document.getElementById('r-cat').value, text })
+  });
+  const data = await res.json();
+  if (data.status === 'success') {
+    document.getElementById('r-succ').style.display = 'block';
+    setTimeout(() => location.reload(), 1500);
+  }
+}
+</script>
+
+{% endblock %}

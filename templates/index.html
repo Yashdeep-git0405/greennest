@@ -1,80 +1,145 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>GreenNest | Fresh Groceries</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
 
-  <!-- NAVBAR -->
-  <nav class="nav">
-    <div class="logo">🌿 GreenNest <span class="tm">A Yashdeep™ Brand</span></div>
-    <div class="nav-links">
-      <a href="/">Home</a>
-      <a href="/support">Support & Reviews</a>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-tm">by <strong>Yashdeep™</strong> — Trusted Quality Since Day One</div>
+    <h1>Fresh Groceries,<br><span>Delivered Fast</span></h1>
+    <p>Shop the freshest produce, dairy, and pantry staples.<br>From farm to your door — quality you can taste.</p>
+    <div class="hero-btns">
+      <a href="/shop" class="btn-primary">Shop Now</a>
+      <a href="/support" class="btn-secondary">View Deals</a>
     </div>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <h1>Fresh Groceries, <span>Delivered Fast</span></h1>
-    <p>Farm to your door — quality you can taste.</p>
-    <a href="#products" class="btn-primary">Shop Now</a>
-  </section>
-
-  <!-- CATEGORIES -->
-  <section class="section">
-    <h2>Browse Categories</h2>
-    <div class="categories">
-      <div class="cat-card">🥦 Vegetables</div>
-      <div class="cat-card">🍓 Fruits</div>
-      <div class="cat-card">🥛 Dairy</div>
-      <div class="cat-card">🍞 Bakery</div>
-      <div class="cat-card">🥩 Meat</div>
-      <div class="cat-card">🧃 Drinks</div>
+  </div>
+  <div class="hero-badges">
+    <div class="hero-badge">
+      <div class="hb-big">500+</div>
+      <div class="hb-lbl">Products in store</div>
     </div>
-  </section>
+    <div class="hero-badge">
+      <div class="hb-big">⚡</div>
+      <div class="hb-lbl">Same-day delivery</div>
+    </div>
+  </div>
+</section>
 
-  <!-- PRODUCTS -->
-  <section class="section" id="products">
-    <h2>Featured Products</h2>
-    <div class="products">
-      <div class="prod-card">
-        <div class="prod-img">🥑</div>
-        <div class="prod-body">
-          <h4>Organic Avocado</h4>
-          <p>Pack of 3 · 450g</p>
+<!-- CATEGORIES -->
+<section class="section">
+  <div class="sec-title">Browse Categories <a href="/shop" class="see-all">See all →</a></div>
+  <div class="categories">
+    <div class="cat-card"><div class="cat-ic">🥦</div><div class="cat-nm">Vegetables</div></div>
+    <div class="cat-card"><div class="cat-ic">🍓</div><div class="cat-nm">Fruits</div></div>
+    <div class="cat-card"><div class="cat-ic">🥛</div><div class="cat-nm">Dairy</div></div>
+    <div class="cat-card"><div class="cat-ic">🍞</div><div class="cat-nm">Bakery</div></div>
+    <div class="cat-card"><div class="cat-ic">🥩</div><div class="cat-nm">Meat</div></div>
+    <div class="cat-card"><div class="cat-ic">🧃</div><div class="cat-nm">Drinks</div></div>
+  </div>
+</section>
+
+<!-- DEAL BANNER -->
+<div class="deal-banner">
+  <div>
+    <h3>🎉 Weekend Special — Up to 30% Off!</h3>
+    <p>Fresh picks at the best prices. Limited time only.</p>
+  </div>
+  <div class="deal-dot">30%</div>
+</div>
+
+<!-- FEATURED PRODUCTS -->
+<section class="section">
+  <div class="sec-title">Featured Products <a href="/shop" class="see-all">See all →</a></div>
+  <div class="products">
+
+    <div class="prod-card">
+      <div class="prod-img" style="background:#e8f5ee">🥑<span class="badge-new">New</span></div>
+      <div class="prod-body">
+        <div class="stars">★★★★★</div>
+        <div class="prod-name">Organic Avocado</div>
+        <div class="prod-sub">Pack of 3 · 450g</div>
+        <div class="prod-foot">
           <span class="price">₹89</span>
-          <button class="add-btn">+ Add</button>
-        </div>
-      </div>
-      <div class="prod-card">
-        <div class="prod-img">🍅</div>
-        <div class="prod-body">
-          <h4>Farm Tomatoes</h4>
-          <p>500g · Local</p>
-          <span class="price">₹45</span>
-          <button class="add-btn">+ Add</button>
-        </div>
-      </div>
-      <div class="prod-card">
-        <div class="prod-img">🍌</div>
-        <div class="prod-body">
-          <h4>Bananas</h4>
-          <p>1 dozen · Fresh</p>
-          <span class="price">₹35</span>
-          <button class="add-btn">+ Add</button>
+          <button class="add-btn" onclick="addToCart('Organic Avocado','🥑',89)">+</button>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <p>GreenNest · A Yashdeep™ Brand · © 2026</p>
-    <a href="/support">Support & Reviews</a>
-  </footer>
+    <div class="prod-card">
+      <div class="prod-img" style="background:#fff8ed">🍅<span class="badge-sale">Sale</span></div>
+      <div class="prod-body">
+        <div class="stars">★★★★☆</div>
+        <div class="prod-name">Farm Tomatoes</div>
+        <div class="prod-sub">500g · Locally sourced</div>
+        <div class="prod-foot">
+          <span class="price">₹45</span><span class="price-old">₹60</span>
+          <button class="add-btn" onclick="addToCart('Farm Tomatoes','🍅',45)">+</button>
+        </div>
+      </div>
+    </div>
 
-</body>
-</html>
+    <div class="prod-card">
+      <div class="prod-img" style="background:#fffbe6">🍌</div>
+      <div class="prod-body">
+        <div class="stars">★★★★★</div>
+        <div class="prod-name">Bananas</div>
+        <div class="prod-sub">1 dozen · Fresh</div>
+        <div class="prod-foot">
+          <span class="price">₹35</span>
+          <button class="add-btn" onclick="addToCart('Bananas','🍌',35)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="prod-card">
+      <div class="prod-img" style="background:#f0f4ff">🥛<span class="badge-new">New</span></div>
+      <div class="prod-body">
+        <div class="stars">★★★★★</div>
+        <div class="prod-name">Full Cream Milk</div>
+        <div class="prod-sub">1 litre · Pasteurized</div>
+        <div class="prod-foot">
+          <span class="price">₹62</span>
+          <button class="add-btn" onclick="addToCart('Full Cream Milk','🥛',62)">+</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- WHY US -->
+<div class="why-section">
+  <div class="sec-title">Why GreenNest?</div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-ic">🌿</div>
+      <h4>Always Fresh</h4>
+      <p>We source daily from local farms to guarantee freshness in every order.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-ic">🚚</div>
+      <h4>Fast Delivery</h4>
+      <p>Same-day delivery available. Your groceries arrive quickly.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-ic">💸</div>
+      <h4>Best Prices</h4>
+      <p>Weekly deals and member discounts keep your grocery bill low.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function addToCart(name, icon, price) {
+  let cart = JSON.parse(localStorage.getItem('gn_cart') || '[]');
+  const existing = cart.find(i => i.name === name);
+  if (existing) existing.qty++;
+  else cart.push({ name, icon, price, qty: 1 });
+  localStorage.setItem('gn_cart', JSON.stringify(cart));
+  updateCartCount();
+  event.target.textContent = '✓';
+  event.target.style.background = '#2d9e61';
+  setTimeout(() => { event.target.textContent = '+'; event.target.style.background = ''; }, 800);
+}
+</script>
+
+{% endblock %}

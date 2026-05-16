@@ -1,0 +1,448 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- ── RAZORPAY SDK ── -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<!-- ══════════════════════════════════════════
+     LOADING OVERLAY
+═══════════════════════════════════════════ -->
+<div id="pay-overlay" style="display:none;position:fixed;inset:0;background:rgba(10,30,18,0.82);backdrop-filter:blur(6px);z-index:9999;align-items:center;justify-content:center;">
+  <div id="pay-overlay-inner" style="background:#fff;border-radius:20px;padding:2.5rem 2rem;text-align:center;width:340px;box-shadow:0 24px 60px rgba(0,0,0,0.25);animation:slideUp 0.4s ease;">
+    <div class="pay-spinner"></div>
+    <div id="overlay-title" style="font-size:18px;font-weight:700;color:#1a1a1a;margin-bottom:6px;">Processing Payment</div>
+    <div id="overlay-sub" style="font-size:12px;color:#6b7280;margin-bottom:1.5rem;">Please do not close this window…</div>
+    <div id="overlay-steps">
+      <div class="psl" id="psl-1">🔒 Securing connection</div>
+      <div class="psl" id="psl-2">💳 Verifying payment details</div>
+      <div class="psl" id="psl-3">🏦 Contacting bank</div>
+      <div class="psl" id="psl-4">✅ Confirming payment</div>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes slideUp { from{transform:translateY(40px);opacity:0} to{transform:translateY(0);opacity:1} }
+@keyframes spin    { to{transform:rotate(360deg)} }
+@keyframes popIn   { 0%{transform:scale(0.4);opacity:0} 80%{transform:scale(1.1)} 100%{transform:scale(1);opacity:1} }
+
+.pay-spinner {
+  width:56px;height:56px;border:5px solid #e8f5ee;
+  border-top-color:#1a7a4a;border-radius:50%;
+  margin:0 auto 1.25rem;animation:spin 0.9s linear infinite;
+}
+.psl {
+  font-size:13px;color:#9ca3af;padding:9px 14px;
+  border-radius:10px;background:#f9faf7;border:1px solid #e5e7eb;
+  margin-bottom:8px;transition:all 0.4s;display:flex;align-items:center;gap:8px;
+  text-align:left;
+}
+.psl.active { color:#1a7a4a;font-weight:600;background:#e8f5ee;border-color:#a3d9b8; }
+.psl.done   { color:#9ca3af;background:#f0fdf4;border-color:#bbf7d0;text-decoration:line-through; }
+.success-ic-big {
+  width:72px;height:72px;background:#e8f5ee;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:38px;margin:0 auto 1rem;animation:popIn 0.5s ease;
+}
+.rzp-badge {
+  display:flex;align-items:center;justify-content:center;
+  gap:8px;margin-top:10px;font-size:12px;color:#6b7280;
+}
+.rzp-logo {
+  background:#072654;color:#fff;font-size:11px;
+  font-weight:800;padding:3px 8px;border-radius:5px;letter-spacing:0.5px;
+}
+.upi-apps { display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px; }
+.upi-app {
+  background:#fff;border:1px solid #e5e7eb;border-radius:10px;
+  padding:10px 16px;text-align:center;cursor:pointer;
+  font-size:12px;font-weight:500;color:#6b7280;
+  transition:all 0.2s;min-width:72px;
+}
+.upi-app:hover { border-color:#1a7a4a;color:#1a7a4a;background:#e8f5ee; }
+.rzp-info-box {
+  background:#f0f4ff;border:1px solid #c7d7f5;border-radius:12px;
+  padding:1.1rem;margin-bottom:14px;
+}
+.cod-info-box {
+  background:#fff8ed;border:1px solid #f5d99a;border-radius:12px;
+  padding:1.1rem;margin-bottom:14px;
+}
+</style>
+
+<!-- ══════════════════════════════════════════
+     PAGE HEADER
+═══════════════════════════════════════════ -->
+<div class="page-header">
+  <div class="breadcrumb">
+    <a href="/">Home</a> → <a href="/cart">Cart</a> → Payment
+  </div>
+  <h2>Checkout</h2>
+  <p>Secure payment powered by Razorpay &amp; GreenNest</p>
+</div>
+
+<div class="pay-layout">
+
+  <!-- ── LEFT: FORM ── -->
+  <div class="pay-form">
+
+    <div class="pay-steps">
+      <div class="step done">✓ Cart</div>
+      <div class="step active">📍 Delivery</div>
+      <div class="step">💳 Payment</div>
+      <div class="step">✓ Done</div>
+    </div>
+
+    <!-- DELIVERY -->
+    <div class="pay-section-title">Delivery Address</div>
+    <div class="form-2">
+      <div class="form-group"><label>First Name</label><input type="text" placeholder="Yashdeep" id="fname"/></div>
+      <div class="form-group"><label>Last Name</label><input type="text" placeholder="Singh" id="lname"/></div>
+    </div>
+    <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="+91 98765 43210" id="phone"/></div>
+    <div class="form-group"><label>Address</label><input type="text" placeholder="House No, Street, Area" id="address"/></div>
+    <div class="form-2">
+      <div class="form-group"><label>City</label><input type="text" placeholder="Thanesar" id="city"/></div>
+      <div class="form-group"><label>Pincode</label><input type="text" placeholder="136118" id="pin"/></div>
+    </div>
+
+    <!-- PAYMENT METHOD -->
+    <div class="pay-section-title" style="margin-top:1.5rem">Payment Method</div>
+    <div class="pay-methods">
+      <div class="pm sel" id="pm-card" onclick="selPM('card')"><div class="pm-ic">💳</div>Card</div>
+      <div class="pm" id="pm-upi"  onclick="selPM('upi')"><div class="pm-ic">📱</div>UPI</div>
+      <div class="pm" id="pm-nb"   onclick="selPM('nb')"><div class="pm-ic">🏦</div>Net Banking</div>
+      <div class="pm" id="pm-rzp"  onclick="selPM('rzp')" style="border-color:#c7d7f5">
+        <div class="pm-ic">⚡</div><span style="color:#072654;font-weight:700">Razorpay</span>
+      </div>
+      <div class="pm" id="pm-cod"  onclick="selPM('cod')"><div class="pm-ic">💵</div>Cash on Delivery</div>
+    </div>
+
+    <!-- CARD -->
+    <div id="section-card">
+      <div class="card-icons">
+        <span class="card-ic">VISA</span><span class="card-ic">MC</span>
+        <span class="card-ic">RUPAY</span><span class="card-ic">AMEX</span>
+      </div>
+      <div class="form-group"><label>Card Number</label>
+        <input type="text" placeholder="1234 5678 9012 3456" maxlength="19" id="card-num" oninput="formatCard(this)"/>
+      </div>
+      <div class="form-2">
+        <div class="form-group"><label>Expiry Date</label><input type="text" placeholder="MM / YY" maxlength="7" id="expiry"/></div>
+        <div class="form-group"><label>CVV</label><input type="password" placeholder="•••" maxlength="3" id="cvv"/></div>
+      </div>
+      <div class="form-group"><label>Name on Card</label><input type="text" placeholder="YASHDEEP SINGH" id="card-name"/></div>
+    </div>
+
+    <!-- UPI -->
+    <div id="section-upi" style="display:none">
+      <div class="form-group"><label>UPI ID</label><input type="text" placeholder="yourname@upi" id="upi-id"/></div>
+      <div class="upi-apps">
+        <div class="upi-app" onclick="fillUpi('gpay')"><div style="font-size:22px">G</div>GPay</div>
+        <div class="upi-app" onclick="fillUpi('phonepe')"><div style="font-size:22px">P</div>PhonePe</div>
+        <div class="upi-app" onclick="fillUpi('paytm')"><div style="font-size:22px">💰</div>Paytm</div>
+      </div>
+    </div>
+
+    <!-- NET BANKING -->
+    <div id="section-nb" style="display:none">
+      <div class="form-group"><label>Select Bank</label>
+        <select id="bank-select">
+          <option value="">-- Select your bank --</option>
+          <option>State Bank of India</option>
+          <option>HDFC Bank</option>
+          <option>ICICI Bank</option>
+          <option>Axis Bank</option>
+          <option>Punjab National Bank</option>
+          <option>Kotak Mahindra Bank</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- RAZORPAY INFO -->
+    <div id="section-rzp" style="display:none">
+      <div class="rzp-info-box">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <span style="font-size:24px">⚡</span>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:#072654">Pay via Razorpay</div>
+            <div style="font-size:12px;color:#6b7280">UPI · Cards · Wallets · Net Banking — all in one</div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:#374151;line-height:1.6">
+          🔐 100% secure · India's most trusted payment gateway<br>
+          Supports: GPay · PhonePe · Paytm · All UPI · Visa · Mastercard · RuPay
+        </div>
+      </div>
+    </div>
+
+    <!-- COD INFO -->
+    <div id="section-cod" style="display:none">
+      <div class="cod-info-box">
+        <div style="font-size:14px;font-weight:600;color:#92400e;margin-bottom:5px">💵 Cash on Delivery</div>
+        <div style="font-size:12px;color:#b45309;line-height:1.6">
+          Pay in cash when your order arrives at your door.<br>
+          Please keep exact change ready for the delivery agent.
+        </div>
+      </div>
+    </div>
+
+    <!-- PAY BUTTON -->
+    <button class="pay-btn" id="pay-btn" onclick="handlePayment()">
+      🔒 Pay ₹<span id="pay-amount">0</span> Securely
+    </button>
+    <div class="rzp-badge">
+      Secured by <span class="rzp-logo">Razorpay</span> &nbsp;·&nbsp; 256-bit SSL
+    </div>
+
+  </div><!-- /pay-form -->
+
+  <!-- ── RIGHT: MINI SUMMARY ── -->
+  <div>
+    <div class="mini-summary">
+      <div class="ms-title">Order Summary</div>
+      <div id="ms-items"></div>
+      <div id="ms-totals"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════ -->
+<script>
+let currentMethod = 'card';
+
+/* ── SWITCH METHOD ── */
+function selPM(m) {
+  currentMethod = m;
+  ['card','upi','nb','rzp','cod'].forEach(id => {
+    document.getElementById('pm-' + id)?.classList.remove('sel');
+    const s = document.getElementById('section-' + id);
+    if (s) s.style.display = 'none';
+  });
+  document.getElementById('pm-' + m).classList.add('sel');
+  document.getElementById('section-' + m).style.display = 'block';
+
+  const amt = getTotal();
+  const btn = document.getElementById('pay-btn');
+  if      (m === 'cod') btn.innerHTML = '📦 Place Order · Pay on Delivery';
+  else if (m === 'rzp') btn.innerHTML = '⚡ Pay ₹' + amt + ' via Razorpay';
+  else                  btn.innerHTML = '🔒 Pay ₹<span id="pay-amount">' + amt + '</span> Securely';
+}
+
+function fillUpi(app) {
+  const map = { gpay:'name@okicici', phonepe:'name@ybl', paytm:'name@paytm' };
+  document.getElementById('upi-id').value = map[app];
+}
+
+function formatCard(el) {
+  let v = el.value.replace(/\D/g,'').substring(0,16);
+  el.value = v.replace(/(.{4})/g,'$1 ').trim();
+}
+
+/* ── CART ── */
+function getTotal() {
+  const saved = localStorage.getItem('gn_total');
+  if (saved) return saved;
+  return JSON.parse(localStorage.getItem('gn_cart')||'[]')
+    .reduce((s,i) => s + i.price * i.qty, 0);
+}
+function getCart() { return JSON.parse(localStorage.getItem('gn_cart')||'[]'); }
+
+/* ── RENDER SUMMARY ── */
+function renderSummary() {
+  const cart  = getCart();
+  const total = getTotal();
+  document.querySelectorAll('#pay-amount').forEach(el => el.textContent = total);
+
+  document.getElementById('ms-items').innerHTML = cart.length
+    ? cart.map(i => `
+        <div class="ms-item">
+          <div class="ms-img">${i.icon}</div>
+          <div class="ms-name">${i.name} x${i.qty}</div>
+          <div class="ms-price">₹${i.price * i.qty}</div>
+        </div>`).join('')
+    : '<p style="color:#9ca3af;font-size:13px;padding:8px 0">Cart is empty</p>';
+
+  const sub = cart.reduce((s,i) => s + i.price * i.qty, 0);
+  document.getElementById('ms-totals').innerHTML = `
+    <div style="border-top:1px solid #e5e7eb;padding-top:10px;margin-top:6px">
+      <div class="ms-row"><span>Subtotal</span><span>₹${sub}</span></div>
+      <div class="ms-row"><span>Delivery</span><span style="color:#1a7a4a;font-weight:500">FREE</span></div>
+      <div class="ms-row" style="font-weight:700;font-size:15px;color:#1a1a1a">
+        <span>Total</span><span style="color:#1a7a4a">₹${total}</span>
+      </div>
+    </div>`;
+}
+
+/* ── VALIDATE ── */
+function validateDelivery() {
+  if (!document.getElementById('fname').value.trim() ||
+      !document.getElementById('phone').value.trim() ||
+      !document.getElementById('address').value.trim()) {
+    alert('⚠️ Please fill in Name, Phone, and Address before proceeding.');
+    return false;
+  }
+  return true;
+}
+
+/* ── LOADING OVERLAY ── */
+function showOverlay() { document.getElementById('pay-overlay').style.display = 'flex'; }
+function hideOverlay() { document.getElementById('pay-overlay').style.display = 'none'; }
+
+function runLoadingSteps(onComplete) {
+  showOverlay();
+  const ids = ['psl-1','psl-2','psl-3','psl-4'];
+  let i = 0;
+
+  function tick() {
+    if (i > 0) {
+      document.getElementById(ids[i-1]).classList.remove('active');
+      document.getElementById(ids[i-1]).classList.add('done');
+    }
+    if (i < ids.length) {
+      document.getElementById(ids[i]).classList.add('active');
+      i++;
+      setTimeout(tick, 950);
+    } else {
+      setTimeout(() => {
+        document.getElementById('pay-overlay-inner').innerHTML = `
+          <div class="success-ic-big">✅</div>
+          <div style="font-size:18px;font-weight:700;color:#1a7a4a;margin-bottom:6px">Payment Successful!</div>
+          <div style="font-size:13px;color:#6b7280">Redirecting to your order…</div>`;
+        setTimeout(onComplete, 1200);
+      }, 400);
+    }
+  }
+  tick();
+}
+
+function clearCart() {
+  localStorage.removeItem('gn_cart');
+  localStorage.removeItem('gn_total');
+}
+
+/* ── MAIN HANDLER ── */
+function handlePayment() {
+  if (!validateDelivery()) return;
+
+  const total  = parseInt(getTotal()) || 0;
+  const method = currentMethod;
+
+  /* RAZORPAY */
+  if (method === 'rzp') { openRazorpay(total); return; }
+
+  /* CARD VALIDATION */
+  if (method === 'card') {
+    const num  = document.getElementById('card-num').value.replace(/\s/g,'');
+    const exp  = document.getElementById('expiry').value.trim();
+    const cvv  = document.getElementById('cvv').value.trim();
+    const name = document.getElementById('card-name').value.trim();
+    if (num.length < 16 || !exp || cvv.length < 3 || !name) {
+      alert('⚠️ Please fill in all card details correctly.'); return;
+    }
+  }
+
+  /* UPI VALIDATION */
+  if (method === 'upi') {
+    if (!document.getElementById('upi-id').value.includes('@')) {
+      alert('⚠️ Please enter a valid UPI ID (e.g. name@upi).'); return;
+    }
+  }
+
+  /* NET BANKING VALIDATION */
+  if (method === 'nb') {
+    if (!document.getElementById('bank-select').value) {
+      alert('⚠️ Please select your bank.'); return;
+    }
+  }
+
+  /* SIMULATE LOADING → SUCCESS */
+  runLoadingSteps(() => {
+    clearCart();
+    window.location.href = '/success';
+  });
+}
+
+/* ══════════════════════════════════════════
+   RAZORPAY
+   Replace key with your real Razorpay Key ID
+   Dashboard → https://dashboard.razorpay.com
+═══════════════════════════════════════════ */
+function openRazorpay(total) {
+  showOverlay();
+  document.getElementById('overlay-title').textContent = 'Opening Razorpay…';
+  document.getElementById('overlay-sub').textContent   = 'Connecting to secure gateway';
+  document.getElementById('overlay-steps').style.display = 'none';
+
+  setTimeout(() => {
+    hideOverlay();
+    document.getElementById('overlay-steps').style.display = 'block';
+
+    var options = {
+      /* ⚠️ REPLACE THIS WITH YOUR REAL KEY from dashboard.razorpay.com → Settings → API Keys */
+      key: 'rzp_test_SpwPdTdaoDIvjs',
+
+      amount:      total * 100,   /* paise */
+      currency:    'INR',
+      name:        'GreenNest',
+      description: 'Fresh Grocery Order — A Yashdeep™ Brand',
+      image:       '',            /* optional logo URL */
+
+      prefill: {
+        name:    (document.getElementById('fname').value + ' ' + document.getElementById('lname').value).trim(),
+        contact: document.getElementById('phone').value,
+        email:   ''
+      },
+
+      notes: {
+        address: document.getElementById('address').value + ', ' + document.getElementById('city').value
+      },
+
+      theme: { color: '#1a7a4a' },
+
+      handler: function(response) {
+        /* ── Payment successful ── */
+        fetch('/verify-payment', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            payment_id: response.razorpay_payment_id,
+            amount:     total
+          })
+        }).finally(() => {
+          showOverlay();
+          document.getElementById('pay-overlay-inner').innerHTML = `
+            <div class="success-ic-big">✅</div>
+            <div style="font-size:18px;font-weight:700;color:#1a7a4a;margin-bottom:6px">Payment Successful!</div>
+            <div style="font-size:12px;color:#6b7280;margin-bottom:4px">
+              Payment ID: ${response.razorpay_payment_id}
+            </div>
+            <div style="font-size:12px;color:#6b7280">Redirecting to your order…</div>`;
+          clearCart();
+          setTimeout(() => { window.location.href = '/success'; }, 1500);
+        });
+      },
+
+      modal: {
+        ondismiss: function() { alert('Payment cancelled. You can try again anytime.'); }
+      }
+    };
+
+    var rzp = new Razorpay(options);
+    rzp.on('payment.failed', function(r) {
+      alert('❌ Payment failed: ' + r.error.description);
+    });
+    rzp.open();
+
+  }, 900);
+}
+
+/* ── INIT ── */
+renderSummary();
+</script>
+
+{% endblock %}

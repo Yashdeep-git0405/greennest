@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="success-page">
+  <div class="success-ic">✅</div>
+  <h2>Order Placed Successfully!</h2>
+  <p>Thank you for shopping with GreenNest.<br>Your fresh groceries are on their way!</p>
+  <div class="order-id-box">Order #{{ order_id }}</div>
+
+  <!-- TRACKING STEPS -->
+  <div class="track-wrap">
+    <div class="track-steps">
+      <div class="ts">
+        <div class="ts-dot done">✓</div>
+        <div class="ts-line done"></div>
+        <div class="ts-lbl done">Confirmed</div>
+      </div>
+      <div class="ts">
+        <div class="ts-dot active">🧑‍🍳</div>
+        <div class="ts-line"></div>
+        <div class="ts-lbl">Packing</div>
+      </div>
+      <div class="ts">
+        <div class="ts-dot">🚚</div>
+        <div class="ts-line"></div>
+        <div class="ts-lbl">On the way</div>
+      </div>
+      <div class="ts">
+        <div class="ts-dot">🏠</div>
+        <div class="ts-lbl">Delivered</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="success-info">
+    <div class="si-card">
+      <div class="si-ic">📦</div>
+      <div><strong>Estimated Delivery</strong><br>Within 2–4 hours</div>
+    </div>
+    <div class="si-card">
+      <div class="si-ic">📱</div>
+      <div><strong>Track your order</strong><br>SMS sent to your phone</div>
+    </div>
+    <div class="si-card">
+      <div class="si-ic">🔄</div>
+      <div><strong>Need help?</strong><br><a href="/support">Visit Support</a></div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:1rem;justify-content:center;margin-top:2rem">
+    <a href="/" class="btn-primary" style="text-decoration:none">Continue Shopping</a>
+    <a href="/support" class="btn-secondary" style="text-decoration:none">Track Order</a>
+  </div>
+</div>
+
+{% endblock %}
